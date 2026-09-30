@@ -166,24 +166,3 @@ GET    /api/bi/customers/segments
 
 POST   /api/nlp/ask                { question }
 ```
-
-## 4. Where each team member's work plugs in
-
-- **Mellon (Data Science)**: replace `backend/utils/fraudDetection.js`'s `computeRiskScore()`
-  with a call to the real ML model. The rest of the pipeline (FraudAlert creation, security
-  event logging) already wires up to whatever score comes back.
-- **Daniel (Cybersecurity)**: `middleware/auth.js`, `middleware/rbac.js`,
-  `middleware/securityLogger.js`, `controllers/securityController.js` — this is the
-  authentication, RBAC, audit-trail (Guardium-style) and monitoring (QRadar-style) layer.
-  IBM Verify/QRadar/Guardium integration, when available, replaces the equivalent concepts
-  here (e.g. point `logSecurityEvent` at a real QRadar event collector).
-- **Janet (Business Intelligence)**: `controllers/biController.js` and
-  `controllers/nlpController.js` are the MVP versions to build on — swap the keyword-matching
-  NLP for a real NLU/LLM call, and extend the KPI/segmentation logic as needed.
-
-## 5. Notes
-
-- Payments are **simulated** — no real payment gateway integration (per project scope).
-- The transaction dataset (`data/securepay_transactions_analyzed.csv`) is synthetic.
-- Security/fraud logic here is an MVP rule-based placeholder, explicitly designed to be
-  swapped out — see section 4 above.
